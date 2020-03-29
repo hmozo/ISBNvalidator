@@ -38,7 +38,13 @@ class ValidateISBNspec {
 
 	}
 	
-	
+	@Test
+	void givenNineUnitsISBNWhenvalidateThenFormatException() {
+
+		Throwable exception= assertThrows(NumberFormatException.class, ()->validationService.validateISBN("123456789"));
+		assertThat(exception.getMessage()).isEqualTo("Wrong number of digits");
+		
+	}
 	
 
 

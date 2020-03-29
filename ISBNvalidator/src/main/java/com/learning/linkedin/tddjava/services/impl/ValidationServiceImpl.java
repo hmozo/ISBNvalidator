@@ -9,7 +9,9 @@ public class ValidationServiceImpl implements ValidationService {
 	@Override
 	public boolean validateISBN(String isbn) {
 
-		
+		if(isbn.length()<10) {
+			throw new NumberFormatException("Wrong number of digits");
+		}
 		int sum= IntStream.rangeClosed(1, isbn.length())
 				.map(r->isbn.length()-r+1)
 				.map(r->r*isbn.charAt(r-1))
