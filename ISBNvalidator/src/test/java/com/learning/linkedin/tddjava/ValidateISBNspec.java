@@ -51,10 +51,14 @@ class ValidateISBNspec {
 	void givenTextISBNWhenValidateThenNumberFormatException() {
 		Throwable exception= assertThrows(NumberFormatException.class, 
 				()->validationService.validateISBN("helloworld"));
-		assertThat(exception.getMessage()).isEqualTo("Only numeric values");
+		assertThat(exception.getMessage()).isEqualTo("Only numeric values or ends with X");
 	}
 	
-	
+	@Test
+	void givenCorrectISBNWithXwhenValidateISBNthenOK() {
+		boolean result= validationService.validateISBN("012000030X");
+		assertThat(result).isEqualTo(true);
+	}
 	
 
 }
