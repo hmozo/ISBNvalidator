@@ -31,21 +31,30 @@ class ValidateISBNspec {
 	@Test
 	void givenWrongISBNwhenValidateISBNthenKO() {
 		//Book book= new Book("9780140449112", "The Oddyssey");
-		boolean validationResult= validationService.validateISBN("1140449116");
-		assertThat(validationResult).isFalse();
-		validationResult= validationService.validateISBN("2586633546");
-		assertThat(validationResult).isFalse();
+		boolean result= validationService.validateISBN("1140449116");
+		assertThat(result).isFalse();
+		result= validationService.validateISBN("2586633546");
+		assertThat(result).isFalse();
 
 	}
 	
 	@Test
-	void givenNineUnitsISBNWhenvalidateThenFormatException() {
+	void givenNineDigitsISBNWhenvalidateThenNumberFormatException() {
 
-		Throwable exception= assertThrows(NumberFormatException.class, ()->validationService.validateISBN("123456789"));
+		Throwable exception= assertThrows(NumberFormatException.class, 
+				()->validationService.validateISBN("123456789"));
 		assertThat(exception.getMessage()).isEqualTo("Wrong number of digits");
 		
 	}
 	
-
+	@Test
+	void givenTextISBNWhenValidateThenNumberFormatException() {
+		Throwable exception= assertThrows(NumberFormatException.class, 
+				()->validationService.validateISBN("helloworld"));
+		assertThat(exception.getMessage()).isEqualTo("Only numeric values");
+	}
+	
+	
+	
 
 }
