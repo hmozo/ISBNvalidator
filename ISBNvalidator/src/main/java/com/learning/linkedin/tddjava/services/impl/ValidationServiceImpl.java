@@ -10,7 +10,7 @@ public class ValidationServiceImpl implements ValidationService {
 
 	@Override
 	public boolean validateISBN(String isbn) {
-		if(isbn.length()!=10) {
+		if(isbn.length()!=10 && isbn.length()!=13) {
 			throw new NumberFormatException("Wrong number of digits");
 		}
 		
@@ -18,16 +18,23 @@ public class ValidationServiceImpl implements ValidationService {
 			throw new NumberFormatException("Only numeric values or ends with X");
 		}
 		
-		return (sumDigits(isbn) % 11 == 0)?true:false;
+		int divisor= isbn.length()==10?11:10;
+		return (sumDigits(isbn) % divisor == 0)?true:false;
+	
 	}
 	
 	private int sumDigits(String isbn) {
+		List<Integer> listFactors13= IntStream.rangeClosed(1, isbn.length())
+			.map(r->r%2==0?3:1).boxed()
+			.collect(Collectors.toList());
+			
 		int result= IntStream.rangeClosed(1, isbn.length())
 			.map(r->isbn.length()-r+1)
-			.map(r->isbn.charAt(r-1)==(int)'X'?0:r*isbn.charAt(isbn.length()-r))
+			.map(r->r==isbn.length() && isbn.charAt(r-1)==(int)'X'?10:
+				(isbn.length()==10?r:
+					listFactors13.get(r-1))*isbn.charAt(isbn.length()-r))
 			.sum();
 		
-		result += ISBNendsWithX(isbn)==true?10:0;
 		return result;
 	}
 
@@ -42,5 +49,7 @@ public class ValidationServiceImpl implements ValidationService {
 	private boolean ISBNendsWithX(String isbn) {
 		return 'X' == isbn.charAt(isbn.length()-1)?true:false;
 	}
+	
+	
 	
 }

@@ -19,7 +19,7 @@ class ValidateISBNspec {
 	}
 	
 	@Test
-	void givenCorrectISBNWhenValidateISBNthenOK() {
+	void givenCorrect10ISBNWhenValidateISBNthenOK() {
 		//Book book= new Book("9780140449112", "The Oddyssey");
 		boolean validationResult= validationService.validateISBN("0140449116");
 		assertThat(validationResult).isTrue();
@@ -29,7 +29,7 @@ class ValidateISBNspec {
 	}
 	
 	@Test
-	void givenWrongISBNwhenValidateISBNthenKO() {
+	void givenWrong10ISBNwhenValidateISBNthenKO() {
 		//Book book= new Book("9780140449112", "The Oddyssey");
 		boolean result= validationService.validateISBN("1140449116");
 		assertThat(result).isFalse();
@@ -39,7 +39,7 @@ class ValidateISBNspec {
 	}
 	
 	@Test
-	void givenNineDigitsISBNWhenvalidateThenNumberFormatException() {
+	void given9DigitsISBNWhenvalidateThenNumberFormatException() {
 
 		Throwable exception= assertThrows(NumberFormatException.class, 
 				()->validationService.validateISBN("123456789"));
@@ -55,10 +55,24 @@ class ValidateISBNspec {
 	}
 	
 	@Test
-	void givenCorrectISBNWithXwhenValidateISBNthenOK() {
+	void givenCorrect10ISBNEndingInXwhenValidateISBNthenOK() {
 		boolean result= validationService.validateISBN("012000030X");
 		assertThat(result).isEqualTo(true);
 	}
+	
+	@Test
+	void givenCorrect13ISBNwhenValidateThenOK() {
+		boolean result= validationService.validateISBN("9781853265747");
+		assertThat(result).isEqualTo(true);
+	}
+	
+	@Test
+	void givenWrong13ISBNwhenValidateThenKO() {
+		boolean result= validationService.validateISBN("9781853265746");
+		assertThat(result).isEqualTo(false);
+	}
+	
+	
 	
 
 }
